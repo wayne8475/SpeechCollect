@@ -1,0 +1,122 @@
+@import url(https://fonts.googleapis.com/earlyaccess/notosanstc.css);
+* {
+	box-sizing: border-box;
+}
+
+html {
+    font-size: 16px;
+	line-height: 1.5;
+}
+
+body {
+    background-color: #232323;
+    margin: 0;
+    font-family: 'Noto Sans TC', sans-serif;
+	transition: background 0.6s;
+    -webkit-transition: background 0.6s;
+    -moz-transition: background 0.6s;
+    text-align: center;
+}
+
+#stripe {
+	background: white;
+	padding: 1rem;
+	color: #484848;
+}
+
+#navbar {
+	display: -webkit-flex;
+    display: flex;
+	flex-direction: row;
+}
+
+#brand {
+	font-weight: bold;
+	padding: 0 1rem;
+}
+
+#about {
+	margin-left: auto;
+	color: #bbb;
+}
+
+form {
+    margin-left: auto;
+	margin-right: auto;
+    max-width: 520px;
+    color: white;
+    text-align: center;
+}
+
+h1 {
+    text-align: center;
+    font-weight: normal;
+    color: white;
+	margin: 0;
+    padding: 20px 0;
+}
+
+#inputbox {
+    width: 30%;
+    float: left;
+    margin: 1.66%;
+}
+
+h2 {
+    text-align: center;
+    font-weight: normal;
+    color: white;
+    text-transform: uppercase;
+	margin: 0 25% 0 25%;
+    padding: 20px 0;
+    border: 8px solid powderblue;
+    border-radius:10px;
+}
+
+.selected {
+    color: white;
+    background: steelblue;
+}
+
+button {
+	display: inline-block;
+	margin: 3rem 1rem 3rem 1rem;
+	padding: 2rem;
+	outline: none;
+	border: none;
+    border-radius: 999rem;
+    background-color: white;
+	font-size: 1rem;
+    font-weight: 700;
+    color: #e01a1a;
+    transition: all 0.3s;
+    -webkit-transition: all 0.3s;
+    -moz-transition: all 0.3s;
+	cursor: pointer;
+}
+.normal {
+	display: block;
+	margin: 0;
+	padding: 4px;
+    background-color: white;
+    color: black;
+}
+
+.selected{
+    display: block;
+	margin: 0;
+	padding: 4px;
+    color: white;
+    background-color: steelblue;
+}
+
+.normal:hover
+{
+    color: blue;
+    background-color: white;
+}
+
+button:hover {
+    color: white;
+    background-color: steelblue;
+}
