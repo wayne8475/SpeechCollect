@@ -9,6 +9,7 @@ var Button1 = document.querySelector("#button1");
 var Button2 = document.querySelector("#button2");
 var Button3 = document.querySelector("#button3");
 var instruction = document.querySelector("#instruction");
+var timer = document.querySelector("#timeanimation");
 
 var clicked = 0;
 var recorded;
@@ -72,12 +73,25 @@ Button1.addEventListener("click", function() {
     if(mode!=1){
         //錄製
         clicked = 1;
+        navigator.permissions.query({name:'microphone'}).then(function(result) {
+            if (result.state == 'granted') {
+          
+            } else if (result.state == 'prompt') {
+          
+            } else if (result.state == 'denied') {
+          
+            }
+            result.onchange = function() {
+          
+            };
+        });
         navigator.mediaDevices.getUserMedia({ audio: true, video: false })
         .then(stream => {
             const mediaRecorder = new MediaRecorder(stream);
             mediaRecorder.start();
             const audioChunks = [];
         
+            timer.style.animationPlayState="running";
             mediaRecorder.addEventListener("dataavailable", event => {
               audioChunks.push(event.data);
             });
@@ -91,6 +105,7 @@ Button1.addEventListener("click", function() {
 
             setTimeout(() => {
                 mediaRecorder.stop();
+                timer.style.animationPlayState="paused";
             }, 1000);
         });    
         Button1.disabled = true;
@@ -99,6 +114,7 @@ Button1.addEventListener("click", function() {
     }
     else{
         //播放
+        recorded.play();
         clicked = 1;
         Button1.disabled = false;
         Button2.disabled = false;
