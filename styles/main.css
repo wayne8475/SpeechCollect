@@ -79,13 +79,13 @@ h2 {
     height: 50px;
     background: red;
     position: relative;
-    animation-name: countone;
+    animation-name: count-one;
     animation-duration: 1s;
     animation-play-state: paused;
     animation-iteration-count: infinite;    
 }
 
-@keyframes countone{
+@keyframes count-one{
     from{
         left:0%;
     }
