@@ -11,9 +11,10 @@ var Button3 = document.querySelector("#button3");
 var instruction = document.querySelector("#instruction");
 
 var clicked = 0;
-var recorder;
+var recorded;
 
-function init() {
+
+window.onload = function init() {
     mode = 0;
     Button1.disabled = false;
     Button2.disabled = false;
@@ -67,17 +68,31 @@ verifyButton.addEventListener("click", function() {
     }   
 })
 
-var handleRecord = function(stream) {
-
-};
-
-
 Button1.addEventListener("click", function() {
     if(mode!=1){
         //錄製
         clicked = 1;
         navigator.mediaDevices.getUserMedia({ audio: true, video: false })
-            .then(handleRecord)    
+        .then(stream => {
+            const mediaRecorder = new MediaRecorder(stream);
+            mediaRecorder.start();
+            const audioChunks = [];
+        
+            mediaRecorder.addEventListener("dataavailable", event => {
+              audioChunks.push(event.data);
+            });
+
+            mediaRecorder.addEventListener("stop", () => {
+                const audioBlob = new Blob(audioChunks);
+                const audioUrl = URL.createObjectURL(audioBlob);
+                const audio = new Audio(audioUrl);
+                recorded = audio;
+            });
+
+            setTimeout(() => {
+                mediaRecorder.stop();
+            }, 1000);
+        });    
         Button1.disabled = true;
         Button2.disabled = false;
         Button3.disabled = true;
@@ -98,6 +113,9 @@ Button2.addEventListener("click", function() {
             alert("請先錄製再進行試聽");
             return;
         }
+        
+        recorded.play();
+
         Button1.disabled = false;
         Button2.disabled = false;
         Button3.disabled = false;
@@ -139,4 +157,6 @@ Button3.addEventListener("click", function() {
         alert("已提交結果，欲參與更多測試請重新整理");
     }
 })
+
+
 
