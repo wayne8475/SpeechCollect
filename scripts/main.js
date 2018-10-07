@@ -10,12 +10,8 @@ var Button2 = document.querySelector("#button2");
 var Button3 = document.querySelector("#button3");
 var instruction = document.querySelector("#instruction");
 
-var gumStream; 						//stream from getUserMedia()
-var recorder; 						//WebAudioRecorder object
-var input; 							//MediaStreamAudioSourceNode  we'll be recording
-var encodeAfterRecord = true;       // when to encode
 var clicked = 0;
-
+var recorder;
 
 function init() {
     mode = 0;
@@ -72,83 +68,16 @@ verifyButton.addEventListener("click", function() {
 })
 
 var handleRecord = function(stream) {
-    audioContext = new AudioContext();
-    gumStream = stream;
-    input = audioContext.createMediaStreamSource(stream);
-    recorder = new WebAudioRecorder(input, {
-        workerDir: "scripts/", // must end with slash
-        encoding: "wav",
-        numChannels:2, //2 is the default, mp3 encoding supports only 2
-        onEncoderLoading: function(recorder, encoding) {
-          // show "loading encoder..." display
-          __log("Loading wav encoder...");
-        },
-        onEncoderLoaded: function(recorder, encoding) {
-          // hide "loading encoder..." display
-          __log("wav encoder loaded");
-        }
-    });
-    recorder.onComplete = function(recorder, blob) { 
-        __log("Encoding complete");
-        createDownloadLink(blob,recorder.encoding);
-    }
 
-    recorder.setOptions({
-      timeLimit:1,
-      encodeAfterRecord:encodeAfterRecord,
-      ogg: {quality: 0.5},
-      mp3: {bitRate: 160}
-    });
-
-    //start the recording process
-    recorder.startRecording();
-
-     __log("Recording started");
 };
 
-function stopRecording() {
-	console.log("stopRecording() called");
-	
-	//stop microphone access
-	gumStream.getAudioTracks()[0].stop();
-
-	//tell the recorder to finish the recording (stop recording + encode the recorded audio)
-	recorder.finishRecording();
-
-	__log('Recording stopped');
-}
-
-function createDownloadLink(blob,encoding) {
-	
-	var url = URL.createObjectURL(blob);
-	var au = document.createElement('audio');
-	var li = document.createElement('li');
-	var link = document.createElement('a');
-
-	//add controls to the <audio> element
-	au.controls = true;
-	au.src = url;
-
-	//link the a element to the blob
-	link.href = url;
-	link.download = new Date().toISOString() + '.'+encoding;
-	link.innerHTML = link.download;
-
-	//add the new audio and a elements to the li element
-	li.appendChild(au);
-	li.appendChild(link);
-
-	//add the li element to the ordered list
-	recordingsList.appendChild(li);
-}
 
 Button1.addEventListener("click", function() {
     if(mode!=1){
         //錄製
         clicked = 1;
         navigator.mediaDevices.getUserMedia({ audio: true, video: false })
-            .then(handleRecord)
-        console.log("startRecording");       Button1.disabled = false;
+            .then(handleRecord)    
         Button1.disabled = true;
         Button2.disabled = false;
         Button3.disabled = true;
