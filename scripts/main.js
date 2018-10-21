@@ -11,8 +11,13 @@ var Button3 = document.querySelector("#button3");
 var instruction = document.querySelector("#instruction");
 var timer = document.querySelector("#timeanimation");
 
+var wordArray = ["Bed","Bird","Cat","Dog","Down","Eight","Five","Four","Go","Happy","House","Left","Marvin","Nine","No","Off","On","One","Right","Seven","Shelia","Six","Stop","Three","Tree","Two","Up","Wow","Yes","Zero"];
+var word = document.querySelector("#word");
+
+
+
 var clicked = 0;
-var recorded;
+var recorded,recBlob;
 
 
 window.onload = function init() {
@@ -20,6 +25,7 @@ window.onload = function init() {
     Button1.disabled = false;
     Button2.disabled = false;
     Button3.disabled = false;
+    word.textContent = wordArray[Math.floor(Math.random()*31)];
     clicked = 0;
 }
 
@@ -42,6 +48,7 @@ submitButton.addEventListener("click", function() {
        Button1.disabled = false;
        Button2.disabled = false;
        Button3.disabled = false;
+       word.textContent = wordArray[Math.floor(Math.random()*30)];
        clicked = 0;
     }   
 })
@@ -65,6 +72,7 @@ verifyButton.addEventListener("click", function() {
        Button1.disabled = false;
        Button2.disabled = false;
        Button3.disabled = false;
+       word.textContent = wordArray[Math.floor(Math.random()*30)]; 
        clicked = 0;
     }   
 })
@@ -73,21 +81,10 @@ Button1.addEventListener("click", function() {
     if(mode!=1){
         //錄製
         clicked = 1;
-        navigator.permissions.query({name:'microphone'}).then(function(result) {
-            if (result.state == 'granted') {
-          
-            } else if (result.state == 'prompt') {
-          
-            } else if (result.state == 'denied') {
-          
-            }
-            result.onchange = function() {
-          
-            };
-        });
         navigator.mediaDevices.getUserMedia({ audio: true, video: false })
         .then(stream => {
             const mediaRecorder = new MediaRecorder(stream);
+            mediaRecorder.mimeType = "audio/webm" ;
             mediaRecorder.start();
             const audioChunks = [];
         
@@ -101,6 +98,7 @@ Button1.addEventListener("click", function() {
                 const audioUrl = URL.createObjectURL(audioBlob);
                 const audio = new Audio(audioUrl);
                 recorded = audio;
+                recBlob = audioBlob;
             });
 
             setTimeout(() => {
@@ -145,7 +143,8 @@ Button2.addEventListener("click", function() {
         Button1.disabled = true;
         Button2.disabled = true;
         Button3.disabled = true;
-        alert("已提交結果，欲參與更多測試請重新整理");
+        alert("已提交結果，感謝您的參與");
+        word.textContent = wordArray[Math.floor(Math.random()*30)]; 
     }
 })
 
@@ -156,10 +155,23 @@ Button3.addEventListener("click", function() {
             alert("尚未錄製聲音");
             return;            
         }
+        ///////////
+        var xhr=new XMLHttpRequest();
+        xhr.onload=function(e) {
+          if(this.readyState === 4) {
+              console.log("Server returned: ",e.target.responseText);
+          }
+        };
+        var fd=new FormData();
+        fd.append("audio_data",recBlob,"filename");
+        xhr.open("POST","upload.php",true);
+        xhr.send(fd); 
+        ///////////
         Button1.disabled = true;
         Button2.disabled = true;
         Button3.disabled = true;
-        alert("已提交結果，欲參與更多測試請重新整理");
+        alert("已提交結果，感謝您的參與");
+        word.textContent = wordArray[Math.floor(Math.random()*30)]; 
     }
     else{
         //錯誤
@@ -170,7 +182,8 @@ Button3.addEventListener("click", function() {
         Button1.disabled = true;
         Button2.disabled = true;
         Button3.disabled = true;
-        alert("已提交結果，欲參與更多測試請重新整理");
+        alert("已提交結果，感謝您的參與");
+        word.textContent = wordArray[Math.floor(Math.random()*30)]; 
     }
 })
 
